@@ -1,0 +1,12 @@
+{
+  "extends": "@adonisjs/tsconfig/tsconfig.package.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "rootDir": "./",
+    "outDir": "./build",
+    "jsx": "preserve",
+    "resolveJsonModule": true
+  },
+  "exclude": ["node_modules", "build", "examples"]
+}
