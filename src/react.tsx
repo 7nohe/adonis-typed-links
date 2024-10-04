@@ -1,4 +1,4 @@
-import { Link as InertiaLink, router as InertiaRouter } from '@inertiajs/react'
+import { Link as InertiaLink, router as InertiaRouter, InertiaLinkProps } from '@inertiajs/react'
 import type { VisitOptions, RequestPayload } from '@inertiajs/core'
 // @ts-ignore
 import React from 'react'
@@ -6,7 +6,7 @@ import { createHref } from './utils'
 import { RouteKey, To } from './types'
 
 export function Link<T extends RouteKey>(
-  props: Omit<React.ComponentProps<typeof InertiaLink>, 'href' | 'to'> & {
+  props: Omit<InertiaLinkProps, 'href' | 'to'> & {
     to: To<T>
   }
 ) {
