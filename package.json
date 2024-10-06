@@ -1,6 +1,6 @@
 {
   "name": "@7nohe/adonis-typed-links",
-  "description": "Typed link component for AdonisJS",
+  "description": "Typed link component for AdonisJS with Inertia",
   "version": "0.0.0",
   "engines": {
     "node": ">=20.6.0"
@@ -66,7 +66,23 @@
   },
   "author": "Daiki Urata",
   "license": "MIT",
-  "keywords": [],
+  "homepage": "https://github.com/7nohe/adonis-typed-links",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/7nohe/adonis-typed-links.git"
+  },
+  "bugs": {
+    "url": "https://github.com/7nohe/adonis-typed-links/issues"
+  },
+  "keywords": [
+    "adonis",
+    "adonisjs",
+    "inertia",
+    "inertiajs",
+    "typescript",
+    "react",
+    "vue"
+  ],
   "eslintConfig": {
     "extends": "@adonisjs/eslint-config/package",
     "ignorePatterns": [
