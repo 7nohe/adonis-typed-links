@@ -1,7 +1,7 @@
 {
   "name": "@7nohe/adonis-typed-links",
   "description": "Typed link component for AdonisJS with Inertia",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "engines": {
     "node": ">=20.6.0"
   },
