@@ -70,3 +70,8 @@ import { createUserValidator } from '#validators/user_validator'
 
 router.post<'users.create', Infer<typof createUserValidator>>({ name: 'users.create' }, { username: 'john' })
 ```
+
+## Examples
+
+- [React](examples/react-app)
+- [Vue 3](examples/vue3-app)
