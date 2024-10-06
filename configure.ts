@@ -13,14 +13,22 @@
 */
 
 import ConfigureCommand from '@adonisjs/core/commands/configure'
-import pkg from './package.json' assert { type: 'json' }
 
 export async function configure(command: ConfigureCommand) {
   const codemods = await command.createCodemods()
 
   await codemods.updateRcFile((transformer) => {
-    transformer.addAssemblerHook('onSourceFileChanged', `${pkg.name}/hooks/generator_hook`)
-    transformer.addAssemblerHook('onBuildStarting', `${pkg.name}/hooks/generator_hook`)
-    transformer.addAssemblerHook('onDevServerStarted', `${pkg.name}/hooks/generator_hook`)
+    transformer.addAssemblerHook(
+      'onSourceFileChanged',
+      '@7nohe/adonis-typed-links/hooks/generator_hook'
+    )
+    transformer.addAssemblerHook(
+      'onBuildStarting',
+      '@7nohe/adonis-typed-links/hooks/generator_hook'
+    )
+    transformer.addAssemblerHook(
+      'onDevServerStarted',
+      '@7nohe/adonis-typed-links/hooks/generator_hook'
+    )
   })
 }
