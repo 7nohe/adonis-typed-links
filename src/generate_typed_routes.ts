@@ -14,11 +14,10 @@ import {
 import { exec } from 'node:child_process'
 import { promisify } from 'node:util'
 import { print } from './print.js'
-import pkg from '../package.json' assert { type: 'json' }
 const execPromise = promisify(exec)
 
 const command = 'node ace list:routes --json'
-const outputPath = `node_modules/${pkg.name}/build/generated`
+const outputPath = 'node_modules/@7nohe/adonis-typed-links/build/generated'
 const jsFileName = 'routes.js'
 const dtsFileName = 'routes.d.ts'
 

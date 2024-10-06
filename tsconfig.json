@@ -5,8 +5,7 @@
     "moduleResolution": "Bundler",
     "rootDir": "./",
     "outDir": "./build",
-    "jsx": "preserve",
-    "resolveJsonModule": true
+    "jsx": "preserve"
   },
   "exclude": ["node_modules", "build", "examples"]
 }
