@@ -27,7 +27,7 @@ export async function generateTypedRoutes() {
   const { stderr, stdout } = await execPromise(command)
 
   if (stderr) {
-    throw new Error(stderr)
+    console.error(stderr)
   }
 
   const json = JSON.parse(stdout) as {
