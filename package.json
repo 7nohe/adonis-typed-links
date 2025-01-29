@@ -22,7 +22,8 @@
     "./hooks/generator_hook": "./build/src/hooks/generator_hook.js",
     "./react": "./build/src/react.jsx",
     "./vue": "./build/src/vue.js",
-    "./routes": "./build/generated/routes.js"
+    "./routes": "./build/generated/routes.js",
+    "./utils": "./build/src/utils.js"
   },
   "scripts": {
     "clean": "del-cli build",
