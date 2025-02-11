@@ -1,4 +1,4 @@
-import { defineComponent, h, SetupContext } from 'vue'
+import { defineComponent, h, reactive, SetupContext } from 'vue'
 import {
   DeleteRouteKey,
   GetRouteKey,
@@ -10,7 +10,7 @@ import {
 } from './types'
 import { Link as InertiaLink, InertiaLinkProps, router as InertiaRouter } from '@inertiajs/vue3'
 import type { VisitOptions, RequestPayload } from '@inertiajs/core'
-import { createHref, setValue } from './utils'
+import { createHref } from './utils'
 import { useForm as useInertiaForm } from '@inertiajs/vue3'
 import { FormDataConvertible } from '@inertiajs/core'
 
@@ -72,16 +72,10 @@ export const router = {
 type FormDataType = Record<string, FormDataConvertible>
 
 export function useForm<TForm extends FormDataType>(initialValues: TForm) {
-  const form = useInertiaForm<TForm>(initialValues)
+  const innerForm = useInertiaForm<TForm>(initialValues)
 
-  function setData<K extends keyof TForm>(key: K, value: TForm[K]) {
-    const obj = setValue({ ...form.data }, key, value)
-    form.setData(obj)
-  }
-
-  return {
-    ...form,
-    setData,
+  const form = reactive({
+    ...innerForm,
     get<T extends keyof GetRouteKey>(to: To<T>, options?: Omit<VisitOptions, 'method'>) {
       const href = createHref(to)
       form.get(href, options)
@@ -102,5 +96,7 @@ export function useForm<TForm extends FormDataType>(initialValues: TForm) {
       const href = createHref(to)
       form.delete(href, options)
     },
-  }
+  })
+
+  return form
 }
