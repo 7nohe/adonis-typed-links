@@ -29,6 +29,16 @@ export default function Home() {
               Users/Show
             </Link>
           </li>
+          <li>
+            <Link
+              to={{
+                name: 'users.create',
+              }}
+              className="text-blue-500 hover:underline"
+            >
+              Users/Create
+            </Link>
+          </li>
         </ul>
       </div>
       <div className="mb-12">

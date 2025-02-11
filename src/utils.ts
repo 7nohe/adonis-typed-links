@@ -26,3 +26,27 @@ export function createHref<T>(to: To<T>) {
   const hrefString = `${baseUrl}${parsedParams}`
   return hrefString
 }
+
+export function setValue<T extends Record<string, any>>(
+  obj: T,
+  path: string | number | symbol,
+  value: any
+): T {
+  const p = path.toString().split('.')
+
+  p.reduce(
+    (acc, key: string, index) => {
+      if (index === p.length - 1) {
+        acc[key] = value
+      } else {
+        if (!acc[key]) {
+          acc[key] = {}
+        }
+      }
+      return acc[key]
+    },
+    obj as Record<string, any>
+  )
+
+  return obj
+}

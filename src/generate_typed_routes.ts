@@ -23,6 +23,23 @@ const dtsFileName = 'routes.d.ts'
 
 type Route = Record<string, { methods: string[]; pattern: string; params?: string[] }>
 
+const reducer = (
+  acc: Route,
+  route: {
+    name: string
+    methods: string[]
+    pattern: string
+  }
+) => {
+  const key = route.name
+  acc[key] = {
+    methods: route.methods,
+    pattern: route.pattern,
+    params: route.pattern.match(/:\w+/g)?.map((param) => param.slice(1)),
+  }
+  return acc
+}
+
 export async function generateTypedRoutes() {
   const { stderr, stdout } = await execPromise(command)
 
@@ -39,35 +56,44 @@ export async function generateTypedRoutes() {
     }[]
   }[]
 
-  const routes = json
+  const filtered = json
     .find((item) => item.domain === 'root')
     ?.['routes'].filter((item) => item.name !== undefined)
-    .reduce(
-      (
-        acc: Route,
-        route: {
-          name: string
-          methods: string[]
-          pattern: string
-        }
-      ) => {
-        const key = route.name
-        acc[key] = {
-          methods: route.methods,
-          pattern: route.pattern,
-          params: route.pattern.match(/:\w+/g)?.map((param) => param.slice(1)),
-        }
-        return acc
-      },
-      {} as Route
+
+  const routes = filtered?.reduce(reducer, {} as Route)
+
+  const getRoutes = filtered
+    ?.filter((route) => route.methods.includes('GET'))
+    .reduce(reducer, {} as Route)
+  const postRoutes = filtered
+    ?.filter((route) => route.methods.includes('POST'))
+    .reduce(reducer, {} as Route)
+  const patchRoutes = filtered
+    ?.filter((route) => route.methods.includes('PATCH'))
+    .reduce(reducer, {} as Route)
+  const putRoutes = filtered
+    ?.filter((route) => route.methods.includes('PUT'))
+    .reduce(reducer, {} as Route)
+  const deleteRoutes = filtered
+    ?.filter((route) => route.methods.includes('DELETE'))
+    .reduce(reducer, {} as Route)
+
+  if (routes) {
+    const source = createTypedRoutesSource(routes, 'routes')
+    const getSource = createTypedRoutesSource(getRoutes ?? {}, 'getRoutes')
+    const postSource = createTypedRoutesSource(postRoutes ?? {}, 'postRoutes')
+    const patchSource = createTypedRoutesSource(patchRoutes ?? {}, 'patchRoutes')
+    const putSource = createTypedRoutesSource(putRoutes ?? {}, 'putRoutes')
+    const deleteSource = createTypedRoutesSource(deleteRoutes ?? {}, 'deleteRoutes')
+    createRoutesSource(
+      `${source}\n${getSource}\n${postSource}\n${patchSource}\n${putSource}\n${deleteSource}`
     )
-
-  if (!routes) {
-    throw new Error('No routes found')
+  } else {
+    console.error('No routes found')
   }
+}
 
-  const source = createTypedRoutesSource(routes)
-
+function createRoutesSource(source: string) {
   const js = transpile(source, { target: ScriptTarget.ESNext })
   const { outputText } = transpileDeclaration(source, {
     compilerOptions: {
@@ -79,15 +105,15 @@ export async function generateTypedRoutes() {
   print(dtsFileName, outputText, outputPath)
 }
 
-function createTypedRoutesSource(routes: Route) {
+function createTypedRoutesSource(routes: Route, variableName: string) {
   const sourceFile = createSourceFile(jsFileName, '', ScriptTarget.Latest, false, ScriptKind.TS)
   const printer = createPrinter({ newLine: NewLineKind.LineFeed })
-  const node = createTypedRoutesNode(routes)
+  const node = createTypedRoutesNode(routes, variableName)
   const source = printer.printNode(EmitHint.Unspecified, node, sourceFile)
   return source
 }
 
-function createTypedRoutesNode(routes: Route) {
+function createTypedRoutesNode(routes: Route, variableName: string) {
   return factory.createSourceFile(
     [
       factory.createVariableStatement(
@@ -95,7 +121,7 @@ function createTypedRoutesNode(routes: Route) {
         factory.createVariableDeclarationList(
           [
             factory.createVariableDeclaration(
-              factory.createIdentifier('routes'),
+              factory.createIdentifier(variableName),
               undefined,
               undefined,
               factory.createObjectLiteralExpression(
