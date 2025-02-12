@@ -24,6 +24,9 @@ router.on('/about').render('about').as('about')
 router.on('/users/:id').render('users/show').as('users.show')
 ```
 
+> [!IMPORTANT]
+> You need to define the route name using the `as` method to make it work with the typed links.
+
 You can use the `Link` component like this:
 
 ```tsx
@@ -73,7 +76,7 @@ import { createUserValidator } from '#validators/user_validator'
 router.post<'users.create', Infer<typof createUserValidator>>({ name: 'users.create' }, { username: 'john' })
 ```
 
-## Form Helper
+### Form Helper
 
 React:
 
