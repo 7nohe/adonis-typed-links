@@ -1,6 +1,8 @@
 ## AdonisJS Typed Links
 
-This is a wrapper of Inertia.js Link component for AdonisJS. It provides type safety for the route names and parameters.
+Provides strongly-typed wrappers for Inertia.js's [Links](https://inertiajs.com/links), [Manual Visits](https://inertiajs.com/manual-visits), and [Form Helper](https://inertiajs.com/forms#form-helper) from AdonisJS routing.
+
+![Link Component](./images/link-component.png)
 
 ## Installation
 
@@ -69,6 +71,58 @@ import { Infer } from '@vinejs/vine/types'
 import { createUserValidator } from '#validators/user_validator'
 
 router.post<'users.create', Infer<typof createUserValidator>>({ name: 'users.create' }, { username: 'john' })
+```
+
+## Form Helper
+
+React:
+
+```tsx
+import { useForm } from '@7nohe/adonis-typed-links/react'
+
+function MyComponent() {
+  const form = useForm({
+    username: '',
+  })
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        form.post({ name: 'users.create' })
+      }}
+    >
+      <input
+        type="text"
+        value={form.data.username}
+        onChange={(e) => form.setData('username', e.target.value)}
+      />
+      <button type="submit">Submit</button>
+    </form>
+  )
+}
+```
+
+Vue 3:
+
+```vue
+<script setup lang="ts">
+import { useForm } from '@7nohe/adonis-typed-links/vue3'
+
+const form = useForm({
+  username: '',
+})
+
+const submit = () => {
+  form.post({ name: 'users.create' })
+}
+</script>
+<template>
+  <form @submit.prevent="submit">
+    <input v-model="form.username" />
+    <button type="submit">Submit</button>
+  </form>
+</template>
 ```
 
 ## Examples
