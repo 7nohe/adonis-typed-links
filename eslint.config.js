@@ -1,4 +1,2 @@
-import { configApp, IGNORE_LIST } from '@adonisjs/eslint-config'
-export default configApp({
-  ignores: IGNORE_LIST,
-})
+import { configApp } from '@adonisjs/eslint-config'
+export default configApp({})
