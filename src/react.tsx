@@ -72,9 +72,14 @@ type FormDataType = Record<string, FormDataConvertible>
 export function useForm<TForm extends FormDataType>(initialValues?: TForm) {
   const form = useInertiaForm<TForm>(initialValues)
 
-  function setData<K extends keyof TForm>(key: K, value: TForm[K]) {
-    const obj = setValue({ ...form.data }, key, value)
-    form.setData(obj)
+  function setData<K extends keyof TForm | TForm>(keyOrData: K, maybeValue?: K extends keyof TForm ? TForm[K] : never) {
+    if (typeof keyOrData === 'object') {
+      form.setData(keyOrData as TForm)
+      return
+    } else {
+      const obj = setValue({ ...form.data }, keyOrData, maybeValue)
+      form.setData(obj)
+    }
   }
 
   return {
